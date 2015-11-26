@@ -12,21 +12,20 @@
  * @ingroup themeable
  */
 #}
-
-<div class="imagefield-crop-widget form-managed-file clearfix">'
+<div{{ attributes }}>
     {% if data.preview %}
-        <div class="imagefield-crop-preview">';
+        <div class="imagefield-crop-preview">
             {{ data.preview }}
-        </div>';
+        </div>
     {% endif %}
     {% if data.cropbox %}
-        <div class="imagefield-crop-cropbox">';
+        <div class="imagefield-crop-cropbox">
             {{ data.cropbox }}
-        </div>';
+        </div>
     {% endif %}
 
     <div class="image-widget-data">
         {# Render widget data without the image preview that was output already. #}
-        {{ data|without('preview') }}
+        {{ data|without('preview')|without('cropbox') }}
     </div>
-</div>';
+</div>

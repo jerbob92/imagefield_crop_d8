@@ -16,22 +16,26 @@ Drupal.behaviors.imagefield_crop = {
         // no cropbox, probably an image upload (http://drupal.org/node/366296)
         return;
       }
-      // add Jcrop exactly once to each cropbox
-      $('.cropbox', context).once(function() {
-        var self = $(this);
 
-        //alert("found a cropbox" + self.attr('id'));
+      // add Jcrop exactly once to each cropbox
+      $('.cropbox', context).once('cropbox').each(function () {
+        var self = $(this);
 
         // get the id attribute for multiple image support
         var self_id = self.attr('id');
-        var id = self_id.substring(0, self_id.indexOf('-cropbox'));
-        // get the name attribute for imagefield name
-        var widget = self.parent().parent();
 
-          if ($(".edit-image-crop-changed", widget).val() == 1) {
-              $('.preview-existing', widget).css({display: 'none'});
-              $('.jcrop-preview', widget).css({display: 'block'});
-          }
+        if (typeof(self_id) == "undefined") {
+          return;
+        }
+
+        var id = self_id.substring(0, self_id.indexOf('-cropbox'));
+
+        // get the name attribute for imagefield name
+        var widget = self.closest('.image-widget');
+        if ($(".edit-image-crop-changed", widget).val() == 1) {
+            $('.preview-existing', widget).css({display: 'none'});
+            $('.jcrop-preview', widget).css({display: 'block'});
+        }
 
         $(this).Jcrop({
           onChange: function(c) {
@@ -51,25 +55,25 @@ Drupal.behaviors.imagefield_crop = {
               display: 'block'
             });
             // Crop image even if user has left image untouched.
-            $(widget).siblings('.preview-existing').css({display: 'none'});
-            $(widget).siblings(".edit-image-crop-x").val(c.x);
-            $(widget).siblings(".edit-image-crop-y").val(c.y);
-            if (c.w) $(widget).siblings(".edit-image-crop-width").val(c.w);
-            if (c.h) $(widget).siblings(".edit-image-crop-height").val(c.h);
-            $(widget).siblings(".edit-image-crop-changed").val(1);
+            $('.preview-existing', widget).css({display: 'none'});
+            $(".edit-image-crop-x", widget).val(c.x);
+            $(".edit-image-crop-y", widget).val(c.y);
+            if (c.w) $(".edit-image-crop-width", widget).val(c.w);
+            if (c.h) $(".edit-image-crop-height", widget).val(c.h);
+            $(".edit-image-crop-changed", widget).val(1);
           },
           onSelect: function(c) {
-            $(widget).siblings('.preview-existing').css({display: 'none'});
-            $(widget).siblings(".edit-image-crop-x").val(c.x);
-            $(widget).siblings(".edit-image-crop-y").val(c.y);
-            if (c.w) $(widget).siblings(".edit-image-crop-width").val(c.w);
-            if (c.h) $(widget).siblings(".edit-image-crop-height").val(c.h);
-            $(widget).siblings(".edit-image-crop-changed").val(1);
+            $('.preview-existing', widget).css({display: 'none'});
+            $(".edit-image-crop-x", widget).val(c.x);
+            $(".edit-image-crop-y", widget).val(c.y);
+            if (c.w) $(".edit-image-crop-width", widget).val(c.w);
+            if (c.h) $(".edit-image-crop-height", widget).val(c.h);
+            $(".edit-image-crop-changed", widget).val(1);
           },
           aspectRatio: settings.imagefield_crop[id].box.ratio,
           boxWidth: settings.imagefield_crop[id].box.box_width,
           boxHeight: settings.imagefield_crop[id].box.box_height,
-          minSize: [Drupal.settings.imagefield_crop[id].minimum.width, Drupal.settings.imagefield_crop[id].minimum.height], 
+          minSize: [settings.imagefield_crop[id].minimum.width, settings.imagefield_crop[id].minimum.height],
           /*
            * Setting the select here calls onChange event, and we lose the original image visibility
           */
@@ -81,7 +85,7 @@ Drupal.behaviors.imagefield_crop = {
           ]
         });
       });
-    };
+    }
   }
 };
 

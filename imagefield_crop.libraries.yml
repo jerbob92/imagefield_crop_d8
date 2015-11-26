@@ -1,0 +1,13 @@
+core:
+  version: VERSION
+  js:
+    vendor/Jcrop/js/jquery.Jcrop.js: {}
+    js/imagefield_crop.js: {}
+  css:
+    theme:
+      vendor/Jcrop/css/jquery.Jcrop.css: {}
+  dependencies:
+    - core/jquery
+    - core/jquery.once
+    - core/drupal
+    - core/drupalSettings
