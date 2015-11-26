@@ -327,6 +327,34 @@ class ImageCropWidget extends ImageWidget {
   }
     */
   }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function massageFormValues(array $values, array $form, FormStateInterface $form_state) {
+    // Don't do entity saving when we have validation erors.
+    if (count($form_state->getErrors()) || !$form_state->isValidationComplete()) {
+      return parent::massageFormValues($values, $form, $form_state);
+    }
+
+    foreach ($values as $value) {
+      if (isset($value['fids'][0]) && isset($value['cropinfo']) && $value['cropinfo']['changed']) {
+        $fid = $value['fids'][0];
+
+        $new_crop_info = array(
+          'fid' => $fid,
+          'x' => $value['cropinfo']['x'],
+          'y' => $value['cropinfo']['y'],
+          'width' => $value['cropinfo']['width'],
+          'height' => $value['cropinfo']['height'],
+        );
+
+        imagefield_crop_update_file_info($new_crop_info);
+      }
+    }
+
+    return parent::massageFormValues($values, $form, $form_state);
+  }
 }
 
 

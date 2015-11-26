@@ -95,3 +95,16 @@ function imagefield_crop_get_file_info($fid) {
 
   return FALSE;
 }
+
+function imagefield_crop_update_file_info($info) {
+  $db = \Drupal::database();
+
+  $query = $db
+    ->upsert('imagefield_crop')
+    ->key('fid')
+    ->fields(array('fid', 'x', 'y', 'width', 'height'))
+    ->values(array_values($info))
+    ->execute();
+
+  return $query;
+}
