@@ -86,6 +86,7 @@ function imagefield_crop_get_file_info($fid) {
   $db = \Drupal::database();
   $fileInfo = $db->select('imagefield_crop', 'ifc')
     ->fields('ifc')
+    ->condition('fid', $fid)
     ->execute()
     ->fetchAllAssoc('fid', PDO::FETCH_NAMED);
 

@@ -78,10 +78,10 @@ Drupal.behaviors.imagefield_crop = {
            * Setting the select here calls onChange event, and we lose the original image visibility
           */
           setSelect: [
-            parseInt($(widget).siblings(".edit-image-crop-x").val()),
-            parseInt($(widget).siblings(".edit-image-crop-y").val()),
-            parseInt($(widget).siblings(".edit-image-crop-width").val()) + parseInt($(widget).siblings(".edit-image-crop-x").val()),
-            parseInt($(widget).siblings(".edit-image-crop-height").val()) + parseInt($(widget).siblings(".edit-image-crop-y").val())
+            parseInt($(".edit-image-crop-x", widget).val()),
+            parseInt($(".edit-image-crop-y", widget).val()),
+            parseInt($(".edit-image-crop-width", widget).val()) + parseInt($(".edit-image-crop-x", widget).val()),
+            parseInt($(".edit-image-crop-height", widget).val()) + parseInt($(".edit-image-crop-y", widget).val())
           ]
         });
       });
