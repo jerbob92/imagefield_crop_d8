@@ -189,8 +189,6 @@ class ImageCropWidget extends ImageWidget {
     $item = $element['#value'];
     $item['fids'] = $element['fids']['#value'];
 
-    $element['#description'] = t('Click on the image and drag to mark how the image will be cropped');
-
     $element['#theme'] = 'imagefield_crop_widget';
 
     $element['#attached']['library'][] = 'imagefield_crop/core';
@@ -201,6 +199,9 @@ class ImageCropWidget extends ImageWidget {
 
     // Add the image preview.
     if (!empty($element['#files']) && $element['#preview_image_style']) {
+
+      $element['#description'] = t('Click on the image and drag to mark how the image will be cropped');
+
       $file = reset($element['#files']);
       $variables = array(
         'style_name' => $element['#preview_image_style'],
