@@ -32,6 +32,7 @@ class ImageCropWidget extends ImageWidget {
     return array(
       'progress_indicator' => 'throbber',
       'preview_image_style' => 'thumbnail',
+      'show_preview' => TRUE,
       'collapsible' => 2,
       'resolution' => '200x150',
       'enforce_ratio' => TRUE,
@@ -45,6 +46,12 @@ class ImageCropWidget extends ImageWidget {
    */
   public function settingsForm(array $form, FormStateInterface $form_state) {
     $element = parent::settingsForm($form, $form_state);
+
+    $element['show_preview'] = array(
+      '#type' => 'checkbox',
+      '#title' => t('Show cropping preview'),
+      '#default_value' => $this->getSetting('show_preview'),
+    );
 
     $element['collapsible'] = array(
       '#type' => 'radios',
@@ -141,7 +148,18 @@ class ImageCropWidget extends ImageWidget {
   public function settingsSummary() {
     $summary = parent::settingsSummary();
 
-    // @todo: Insert our own summary here.
+    $collapsible_options = array(
+      1 => t('None.'),
+      2 => t('Collapsible, expanded by default.'),
+      3 => t('Collapsible, collapsed by default.'),
+    );
+
+    $summary[] = t('Show cropping preview: @show_preview', array('@show_preview' => ($this->getSetting('show_preview') ? t('Yes') : 'No')));
+    $summary[] = t('Collapsible behavior: @collapsible', array('@collapsible' => $collapsible_options[$this->getSetting('collapsible')]));
+    $summary[] = t('Crop resolution: @resolution', array('@resolution' => $this->getSetting('resolution')));
+    $summary[] = t('Crop area: @croparea', array('@croparea' => $this->getSetting('croparea')));
+    $summary[] = t('Enforce cropping ratio: @enforce', array('@enforce' => ($this->getSetting('enforce_ratio') ? t('Yes') : 'No')));
+    $summary[] = t('Enforce minimum cropping selection: @enforce', array('@enforce' => ($this->getSetting('enforce_minimum') ? t('Yes') : 'No')));
 
     return $summary;
   }
@@ -151,6 +169,7 @@ class ImageCropWidget extends ImageWidget {
    */
   public function formElement(FieldItemListInterface $items, $delta, array $element, array &$form, FormStateInterface $form_state) {
     $element = parent::formElement($items, $delta, $element, $form, $form_state);
+    $element['#imagefield_crop_show_preview'] = $this->getSetting('show_preview');
     $element['#imagefield_crop_resolution'] = $this->getSetting('resolution');
     $element['#imagefield_crop_croparea'] = $this->getSetting('croparea');
     $element['#imagefield_crop_enforce_ratio'] = $this->getSetting('enforce_ratio');
@@ -204,7 +223,11 @@ class ImageCropWidget extends ImageWidget {
         }
       }
 
-      $element['preview']['#theme'] = 'imagefield_crop_preview';
+      if ($element['#imagefield_crop_show_preview']) {
+        $element['preview']['#theme'] = 'imagefield_crop_preview';
+      } else {
+        $element['preview']['#access'] = FALSE;
+      }
 
       $element['cropbox'] = array(
         '#theme' => 'image',
@@ -230,6 +253,13 @@ class ImageCropWidget extends ImageWidget {
           'minimum' => array(
             'width'   => $element['#imagefield_crop_enforce_minimum'] ? $res_w : NULL,
             'height'  => $element['#imagefield_crop_enforce_minimum'] ? $res_h : NULL,
+          ),
+          'preview' => $element['#imagefield_crop_show_preview'],
+          'preview_info' => array(
+            'orig_width' => $variables['width'],
+            'orig_height' => $variables['height'],
+            'width' => (int) $res_w,
+            'height' => (int) $res_h,
           ),
         ),
       );

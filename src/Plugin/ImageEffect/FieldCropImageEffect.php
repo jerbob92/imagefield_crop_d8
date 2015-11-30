@@ -2,16 +2,13 @@
 
 /**
  * @file
- * Contains \Drupal\image\Plugin\ImageEffect\CropImageEffect.
+ * Contains \Drupal\imagefield_crop\Plugin\ImageEffect\FieldCropImageEffect.
  */
 
 namespace Drupal\imagefield_crop\Plugin\ImageEffect;
 
-use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Image\ImageInterface;
 use Drupal\image\ImageEffectBase;
-use Drupal\file\Entity\File;
-
 
 /**
  * Crops an image resource.

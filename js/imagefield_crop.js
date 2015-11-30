@@ -30,32 +30,30 @@ Drupal.behaviors.imagefield_crop = {
 
         var id = self_id.substring(0, self_id.indexOf('-cropbox'));
 
-        // get the name attribute for imagefield name
-        var widget = self.closest('.image-widget');
-        if ($(".edit-image-crop-changed", widget).val() == 1) {
-            $('.preview-existing', widget).css({display: 'none'});
-            $('.jcrop-preview', widget).css({display: 'block'});
+        if (settings.imagefield_crop[id].preview) {
+          var preview = $('.imagefield-crop-preview', widget);
         }
 
+        // get the name attribute for imagefield name
+        var widget = self.closest('.image-widget');
         $(this).Jcrop({
           onChange: function(c) {
-            $('.preview-existing', widget).css({display: 'none'});
-            var preview = $('.imagefield-crop-preview', widget);
-            // skip newly added blank fields
-            if (undefined == settings.imagefield_crop[id].preview) {
-              return;
+
+            if (settings.imagefield_crop[id].preview) {
+              var rx = settings.imagefield_crop[id].preview_info.width / c.w;
+              var ry = settings.imagefield_crop[id].preview_info.height / c.h;
+              $('.jcrop-preview', preview).css({
+                width: Math.round(rx * settings.imagefield_crop[id].preview_info.orig_width) + 'px',
+                height: Math.round(ry * settings.imagefield_crop[id].preview_info.orig_height) + 'px',
+                marginLeft: '-' + Math.round(rx * c.x) + 'px',
+                marginTop: '-' + Math.round(ry * c.y) + 'px',
+                display: 'block'
+              });
+            } else {
+              $('.jcrop-preview', preview).hide();
             }
-            var rx = settings.imagefield_crop[id].preview.width / c.w;
-            var ry = settings.imagefield_crop[id].preview.height / c.h;
-            $('.jcrop-preview', preview).css({
-              width: Math.round(rx * settings.imagefield_crop[id].preview.orig_width) + 'px',
-              height: Math.round(ry * settings.imagefield_crop[id].preview.orig_height) + 'px',
-              marginLeft: '-' + Math.round(rx * c.x) + 'px',
-              marginTop: '-' + Math.round(ry * c.y) + 'px',
-              display: 'block'
-            });
+
             // Crop image even if user has left image untouched.
-            $('.preview-existing', widget).css({display: 'none'});
             $(".edit-image-crop-x", widget).val(c.x);
             $(".edit-image-crop-y", widget).val(c.y);
             if (c.w) $(".edit-image-crop-width", widget).val(c.w);
@@ -63,7 +61,6 @@ Drupal.behaviors.imagefield_crop = {
             $(".edit-image-crop-changed", widget).val(1);
           },
           onSelect: function(c) {
-            $('.preview-existing', widget).css({display: 'none'});
             $(".edit-image-crop-x", widget).val(c.x);
             $(".edit-image-crop-y", widget).val(c.y);
             if (c.w) $(".edit-image-crop-width", widget).val(c.w);

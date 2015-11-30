@@ -1,11 +1,5 @@
 <?php
 
-/* 
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 use Drupal\Core\Render\Element;
 use Drupal\image\Entity\ImageStyle;
 
@@ -72,7 +66,7 @@ function template_preprocess_imagefield_crop_preview(&$variables) {
       '#style_name' => $element['#style_name'],
       '#uri' => $element['#uri'],
       '#alt' => 'jcrop-preview',
-      '#attributes' => array('class' => 'jcrop-preview', 'style' => 'display:none'),
+      '#attributes' => array('class' => 'jcrop-preview'),
     ),
   );
 
