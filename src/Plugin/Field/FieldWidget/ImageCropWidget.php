@@ -274,44 +274,44 @@ class ImageCropWidget extends ImageWidget {
    * Element validate function for resolution fields.
    */
   public static function validateResolution($element, FormStateInterface $form_state) {
-    /*
-    $settings = $form_state['values']['instance']['widget']['settings'];
-  // _image_field_resolution_validate() does most of the validation
-  if ($settings['enforce_ratio'] && (empty($element['x']['#value']))) {
-    form_error($element, t('Target resolution must be defined as WIDTHxHEIGHT if resolution is to be enforced'));
-  }
-    */
+    $values = $form_state->getValues();
+    $settings = NestedArray::getValue($values, array_slice($element['#parents'], 0, -1));
+
+    // Drupal\image\Plugin\Field\FieldType\ImageItem->validateResolution does most of the validation
+    if ($settings['enforce_ratio'] && (empty($element['x']['#value']))) {
+      $form_state->setError($element, t('Target resolution must be defined as WIDTHxHEIGHT if resolution is to be enforced'));
+    }
   }
 
   /**
    * Element validate function for resolution fields.
    */
   public static function validateEnforceMinimum($element, FormStateInterface $form_state) {
-    /*
-    $settings = $form_state['values']['instance']['widget']['settings'];
-  $rw = ($settings['resolution']['x']) ? $settings['resolution']['x'] : 0;
-  $rh = ($settings['resolution']['y']) ? $settings['resolution']['y'] : 0;
+    $values = $form_state->getValues();
+    $settings = NestedArray::getValue($values, array_slice($element['#parents'], 0, -1));
 
-  if ($settings['enforce_minimum'] && (!is_numeric($rw) || intval($rw) != $rw || $rw <= 0 || !is_numeric($rh) || intval($rh) != $rh || $rh <= 0)) {
-    form_error($element, t('Target resolution must be defined as WIDTH_HEIGHT if minimum is to be enforced.'));
-  }
-    */
+    list($res_w, $res_h) = explode('x', $settings['resolution']);
+
+    $rw = ($res_w) ? $res_w : 0;
+    $rh = ($res_h) ? $res_h : 0;
+
+    if ($settings['enforce_minimum'] && (!is_numeric($rw) || intval($rw) != $rw || $rw <= 0 || !is_numeric($rh) || intval($rh) != $rh || $rh <= 0)) {
+      $form_state->setError($element, t('Target resolution must be defined as WIDTH_HEIGHT if minimum is to be enforced.'));
+    }
   }
 
   /**
    * Element validate function for resolution fields.
    */
   public static function validateCropArea($element, FormStateInterface $form_state) {
-    /*
-    //dpm(__FUNCTION__);
-      foreach (array('x', 'y') as $dimension) {
-        $value = $element[$dimension]['#value'];
-        if (!empty($value) && !is_numeric($value)) {
-          form_error($element[$dimension], t('The @dimension value must be numeric.', array('@dimesion' => $dimension)));
-          return;
-        }
+    foreach (array('x', 'y') as $dimension) {
+      $value = $element[$dimension]['#value'];
+      if (!empty($value) && !is_numeric($value)) {
+        $form_state->setError($element[$dimension], t('The @dimension value must be numeric.', array('@dimesion' => $dimension)));
+        return;
       }
-    */
+    }
+
     $form_state->setValueForElement($element, intval($element['x']['#value']) . 'x' . intval($element['y']['#value']));
   }
 
@@ -319,13 +319,14 @@ class ImageCropWidget extends ImageWidget {
    * Element validate function for resolution fields.
    */
   public static function validateEnforceRatio($element, FormStateInterface $form_state) {
-    /*
-    //dpm(__FUNCTION__);
-  $settings = $form_state['values']['instance']['widget']['settings'];
-  if ($settings['resolution']['x'] && !$element['#value']) {
-    drupal_set_message(t('Output resolution is defined, but not enforced. Final images might be distroted'));
-  }
-    */
+    $values = $form_state->getValues();
+    $settings = NestedArray::getValue($values, array_slice($element['#parents'], 0, -1));
+
+    list($res_w, $res_h) = explode('x', $settings['resolution']);
+
+    if ($res_w && !$element['#value']) {
+      drupal_set_message(t('Output resolution is defined, but not enforced. Final images might be distorted'), 'warning');
+    }
   }
 
   /**
