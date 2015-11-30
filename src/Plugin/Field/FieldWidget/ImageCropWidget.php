@@ -141,7 +141,7 @@ class ImageCropWidget extends ImageWidget {
   public function settingsSummary() {
     $summary = parent::settingsSummary();
 
-    // Insert our own summary here.
+    // @todo: Insert our own summary here.
 
     return $summary;
   }
