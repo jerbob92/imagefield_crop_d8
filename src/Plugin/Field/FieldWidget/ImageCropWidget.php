@@ -11,6 +11,7 @@ use Drupal\Component\Utility\NestedArray;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\image\Plugin\Field\FieldWidget\ImageWidget;
 use Drupal\Component\Utility\Html;
+use Drupal\file\Entity\File;
 
 /**
  * Plugin implementation of the 'image_image_crop' widget.
@@ -382,6 +383,12 @@ class ImageCropWidget extends ImageWidget {
         );
 
         imagefield_crop_update_file_info($new_crop_info);
+
+        $source = File::load($fid);
+
+        if ($source) {
+          image_path_flush($source->getFileUri());
+        }
       }
     }
 
