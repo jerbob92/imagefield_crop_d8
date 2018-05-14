@@ -9,7 +9,7 @@ function imagefield_crop_schema() {
       'fid' => array(
         'type' => 'int',
         'unsigned' => FALSE,
-        'not null' => FALSE,
+        'not null' => TRUE,
       ),
       'x' => array(
         'type' => 'int',

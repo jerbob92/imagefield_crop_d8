@@ -38,7 +38,6 @@ Drupal.behaviors.imagefield_crop = {
         var widget = self.closest('.image-widget');
         $(this).Jcrop({
           onChange: function(c) {
-
             if (settings.imagefield_crop[id].preview) {
               var rx = settings.imagefield_crop[id].preview_info.width / c.w;
               var ry = settings.imagefield_crop[id].preview_info.height / c.h;
@@ -71,6 +70,7 @@ Drupal.behaviors.imagefield_crop = {
           boxWidth: settings.imagefield_crop[id].box.box_width,
           boxHeight: settings.imagefield_crop[id].box.box_height,
           minSize: [settings.imagefield_crop[id].minimum.width, settings.imagefield_crop[id].minimum.height],
+          trueSize: [settings.imagefield_crop[id].preview_info.orig_width, settings.imagefield_crop[id].preview_info.orig_height],
           /*
            * Setting the select here calls onChange event, and we lose the original image visibility
           */
