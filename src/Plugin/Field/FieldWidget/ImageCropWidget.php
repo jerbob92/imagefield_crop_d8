@@ -357,7 +357,7 @@ class ImageCropWidget extends ImageWidget {
     list($res_w, $res_h) = explode('x', $settings['resolution']);
 
     if ($res_w && !$element['#value']) {
-      drupal_set_message(t('Output resolution is defined, but not enforced. Final images might be distorted'), 'warning');
+      \Drupal::messenger()->addMessage(t('Output resolution is defined, but not enforced. Final images might be distorted'), 'warning');
     }
   }
 
