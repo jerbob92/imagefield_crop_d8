@@ -92,13 +92,27 @@ function imagefield_crop_get_file_info($fid) {
 }
 
 function imagefield_crop_update_file_info($info) {
+  $values = [];
   $db = \Drupal::database();
+  $defaults = array(
+    'x'       => 0,
+    'y'       => 0,
+    'width'   => 50,
+    'height'  => 50,
+    'changed' => 0,
+  );
+  // applies default values if no value has been received
+  foreach($info as $k => $v)
+    if(is_nan($v) || $v === NAN || $v === 'NaN' || !isset($v))
+      $values[$k] = $defaults[$k];
+    else
+      $values[$k] = $v;
 
   $query = $db
     ->upsert('imagefield_crop')
     ->key('fid')
     ->fields(array('fid', 'x', 'y', 'width', 'height'))
-    ->values(array_values($info))
+    ->values($values)
     ->execute();
 
   return $query;
