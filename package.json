@@ -1,0 +1,9 @@
+{
+  "name": "imagefield_crop_d8",
+  "version": "1.0.0",
+  "description": "An implementation of a imagefield with cropping and other effects.",
+  "devDependencies": {
+    "@types/jquery": "^3.5.27",
+    "jquery-once": "^2.2.3"
+  }
+}
