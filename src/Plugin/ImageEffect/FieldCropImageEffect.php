@@ -27,7 +27,7 @@ class FieldCropImageEffect extends ImageEffectBase {
   public function applyEffect(ImageInterface $image) {
     $path = $image->getSource();
 
-    $entity_manager = \Drupal::entityManager();
+    $entity_manager = \Drupal::entityTypeManager();
     $files = $entity_manager->getStorage('file')->loadByProperties(array(
       'uri' => $path,
     ));
@@ -55,7 +55,7 @@ class FieldCropImageEffect extends ImageEffectBase {
    */
   public function transformDimensions(array &$dimensions, $uri) {
 
-    $entity_manager = \Drupal::entityManager();
+    $entity_manager = \Drupal::entityTypeManager();
     $files = $entity_manager->getStorage('file')->loadByProperties(array(
       'uri' => $uri,
     ));
